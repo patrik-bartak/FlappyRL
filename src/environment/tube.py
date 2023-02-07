@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class Tube:
     """
     Class representing the moving tube on the screen.
@@ -40,7 +41,10 @@ class Tube:
         # Check if player is inside the tube
         if player.x + player.width >= self.x and player.x <= self.x + self.width:
             # Return true if y position would be in a collision state, otherwise false
-            return player.y + player.height >= self.gap_position + self.gap_height or player.y <= self.gap_position
+            return (
+                player.y + player.height >= self.gap_position + self.gap_height
+                or player.y <= self.gap_position
+            )
         return False
 
     def __str__(self):

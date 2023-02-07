@@ -2,7 +2,6 @@ from tube import Tube
 
 
 class TubeGenerator:
-
     def __init__(self, player, settings):
         """
         TubeGenerator class takes care of generating new tubes and updating them throughout the game.
@@ -53,8 +52,18 @@ class TubeGenerator:
         n = len(self.tubes)
         self.tubes = list(filter(lambda tube: tube.verify(), self.tubes))
         self.passed += abs(n - len(self.tubes))
-        if len(self.tubes) == 0 or self.tubes[-1].get_x_coordinate()[1] + self.distance < self.start:
-            self.tubes.append(Tube(self.start, self.gap_height, self.gap_width, self.accel * tick + self.initial_speed))
+        if (
+            len(self.tubes) == 0
+            or self.tubes[-1].get_x_coordinate()[1] + self.distance < self.start
+        ):
+            self.tubes.append(
+                Tube(
+                    self.start,
+                    self.gap_height,
+                    self.gap_width,
+                    self.accel * tick + self.initial_speed,
+                )
+            )
 
     def collision(self):
         """
