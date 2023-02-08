@@ -13,7 +13,7 @@ def main():
     :return:
     """
     settings = Settings(
-        agent=RandomAgent(),
+        agent=HumanAgent(),
         reward_function=lambda x: 0,
         gui_bool=True,
         max_ticks=1000,
