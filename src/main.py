@@ -50,10 +50,8 @@ def game_loop(settings):
     if settings.gui_bool:
         gui = Gui(settings, player, generator)
     while tick < settings.max_ticks and not ended:
-        # Update player
-        player.update()
-        # Update all tubes
-        ended = generator.update(tick)
+        # Update player and tubes and check for collisions
+        ended = player.update() or generator.update(tick)
         if ended:
             print("COLLISION")
         action = settings.agent.act(state=None)

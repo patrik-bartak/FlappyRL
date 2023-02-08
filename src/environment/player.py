@@ -21,8 +21,8 @@ class Player:
             self.y = 0
             self.dy = 0
         if self.y + self.height > self.settings.max_y:
-            self.y = self.settings.max_y - self.height
-            self.dy = 0
+            return True
+        return False
 
     def get_visual(self):
         return pg.rect.Rect(self.x, self.y, self.width, self.height)
