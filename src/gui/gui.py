@@ -8,6 +8,7 @@ class Gui:
         self.player = player
         self.tube_generator = tube_generator
         pg.init()
+        self.settings = settings
         self.clock = pg.time.Clock()
         self.window = pg.display.set_mode((settings.max_x, settings.max_y))
         self.max_x = settings.max_x
@@ -54,7 +55,7 @@ class Gui:
     def draw_frame_counter(self):
         """Draw the counter for the frame and framerate"""
         text = self.font.render(
-            f"FPS: {self.clock.get_fps():.0f} | Frame: {self.frame_number}",
+            f"FPS: {self.clock.get_fps():.0f} | Frame: {self.frame_number} | Agent: {self.settings.agent.__class__()}",
             True,
             (0, 0, 0),
         )
