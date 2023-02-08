@@ -16,7 +16,18 @@ def main():
     :return:
     """
     settings = Settings(
-        HumanAgent(), lambda: 0, True, 1000, 9.81, MAX_X, MAX_Y, 0, 20, 10, 10, 1,
+        agent=HumanAgent(),
+        reward_function=lambda x: 0,
+        gui_bool=True,
+        max_ticks=1000,
+        acceleration=5.81,
+        max_x=MAX_X,
+        max_y=MAX_Y,
+        starting_x_coordinate=500,
+        distance_between_tubes=200 ,
+        gap_height=0.5 ,
+        gap_width=0.15,
+        initial_speed=1,
     )
     game_loop(settings)
 
@@ -37,8 +48,7 @@ def game_loop(settings):
     )
     # Define reward function in the settings
     reward_function = settings.reward_function
-    # generator = TubeGenerator(player=player, settings=settings)
-    generator = None
+    generator = TubeGenerator(player=player, settings=settings)
     # Instantiate the GUI if required
     if settings.gui_bool:
         gui = Gui(settings, player, generator)
@@ -46,9 +56,10 @@ def game_loop(settings):
         # Update player
         player.update()
         # Update all tubes
-        # ended = generator.update(tick)
+        ended = generator.update(tick)
+        if ended:
+            print("COLLISION")   
         action = settings.agent.act(state=None)
-        print(action, player.x, player.y, player.dx, player.dy)
         if action == 1:
             player.dy = -10
         # Record the state, action and reward to the agent
@@ -61,6 +72,7 @@ def game_loop(settings):
         # Display GUI if needed
         if settings.gui_bool:
             gui.draw()
+    print("GAME OVER. ")
 
 
 if __name__ == "__main__":

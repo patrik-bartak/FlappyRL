@@ -9,12 +9,11 @@ class Settings:
     reward_function: Callable
     gui_bool: bool
     max_ticks: int
-    reward_function: Callable
     acceleration: float
     max_x: int
     max_y: int
     starting_x_coordinate: int
     distance_between_tubes: float
-    gap_height: int
-    gap_width: int
+    gap_height: float
+    gap_width: float
     initial_speed: int

@@ -16,6 +16,8 @@ class TubeGenerator:
         self.gap_height = settings.gap_height
         self.gap_width = settings.gap_width
         self.initial_speed = settings.initial_speed
+        self.max_x = settings.max_x
+        self.max_y = settings.max_y
         self.tubes = []
         # Number of passed tubes increases only when a tube is forgotten.
         self.passed = 0
@@ -35,12 +37,12 @@ class TubeGenerator:
         # Check whether game is not yet finished
         ended = self.collision()
         if ended:
-            return False
+            return True
         # Update each tube present
         ver = True
         for tube in self.tubes:
             ver &= tube.update(tick)
-        return ver
+        return not ver
 
     def verify(self, tick):
         """
@@ -54,14 +56,16 @@ class TubeGenerator:
         self.passed += abs(n - len(self.tubes))
         if (
             len(self.tubes) == 0
-            or self.tubes[-1].get_x_coordinate()[1] + self.distance < self.start
+            or self.tubes[-1].get_x_coord()[1] + self.distance < self.start
         ):
             self.tubes.append(
                 Tube(
                     self.start,
                     self.gap_height,
                     self.gap_width,
-                    self.accel * tick + self.initial_speed,
+                    self.initial_speed,
+                    self.max_x,
+                    self.max_y
                 )
             )
 
@@ -71,4 +75,12 @@ class TubeGenerator:
 
         :return: Returns true if collision was detected.
         """
-        return all(map(lambda tube: tube.collision(self.player), self.tubes))
+        return any(map(lambda tube: tube.collision(self.player), self.tubes))
+
+    def __str__(self):
+        if len(self.tubes) == 0:
+            return '[]'
+        res = '['
+        for tube in self.tubes:
+            res += str(tube) + ', '
+        return res[:-2] + ']'
