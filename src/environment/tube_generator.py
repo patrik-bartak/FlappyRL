@@ -1,4 +1,4 @@
-from tube import Tube
+from environment.tube import Tube
 
 
 class TubeGenerator:
@@ -65,7 +65,7 @@ class TubeGenerator:
                     self.gap_width,
                     self.initial_speed,
                     self.max_x,
-                    self.max_y
+                    self.max_y,
                 )
             )
 
@@ -79,8 +79,8 @@ class TubeGenerator:
 
     def __str__(self):
         if len(self.tubes) == 0:
-            return '[]'
-        res = '['
+            return "[]"
+        res = "["
         for tube in self.tubes:
-            res += str(tube) + ', '
-        return res[:-2] + ']'
+            res += str(tube) + ", "
+        return res[:-2] + "]"

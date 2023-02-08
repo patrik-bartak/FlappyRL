@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from agent import Agent
+from environment.agent import Agent
 import pygame as pg
 
 

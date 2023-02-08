@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Callable
-from gui import Gui
+from gui.gui import Gui
 
 
 @dataclass

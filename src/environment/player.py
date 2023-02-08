@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 import pygame as pg
-import numpy as np
-from settings import Settings
+from environment.settings import Settings
 
 
 @dataclass
@@ -15,7 +14,7 @@ class Player:
     dy: int = 0
 
     def update(self):
-        self.dy += 1
+        self.dy += 1 * self.settings.acceleration
         self.x += self.dx
         self.y += self.dy
         if self.y < 0:

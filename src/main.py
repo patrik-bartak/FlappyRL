@@ -1,11 +1,8 @@
-from gui import Gui
-from tube_generator import TubeGenerator
-from settings import Settings
-from player import Player
-from human_agent import HumanAgent
-
-MAX_X = 640
-MAX_Y = 480
+from gui.gui import Gui
+from environment.tube_generator import TubeGenerator
+from environment.settings import Settings
+from environment.player import Player
+from environment.human_agent import HumanAgent
 
 
 def main():
@@ -20,14 +17,14 @@ def main():
         reward_function=lambda x: 0,
         gui_bool=True,
         max_ticks=1000,
-        acceleration=5.81,
-        max_x=MAX_X,
-        max_y=MAX_Y,
+        acceleration=0.5,
+        max_x=1000,
+        max_y=600,
         starting_x_coordinate=500,
-        distance_between_tubes=200 ,
-        gap_height=0.5 ,
-        gap_width=0.15,
-        initial_speed=1,
+        distance_between_tubes=200,
+        gap_height=0.5,
+        gap_width=0.05,
+        initial_speed=2,
     )
     game_loop(settings)
 
