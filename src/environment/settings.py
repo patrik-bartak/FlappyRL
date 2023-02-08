@@ -14,7 +14,7 @@ class Settings:
     acceleration: float
     max_x: int
     max_y: int
-    starting_x_coordinate: int
+    starting_x_coordinate: float
     distance_between_tubes: float
     gap_height: float
     gap_width: float

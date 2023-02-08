@@ -13,20 +13,20 @@ def main():
     :return:
     """
     settings = Settings(
-        agent=RandomAgent(),
+        agent=HumanAgent(),
         reward_function=lambda x: 0,
         gui_bool=True,
         max_ticks=1000,
-        acceleration=0.5,
+        acceleration=0.001,
         max_x=1000,
         max_y=600,
-        starting_x_coordinate=500,
-        distance_between_tubes=200,
+        starting_x_coordinate=1,
+        distance_between_tubes=0.2,
         gap_height=0.5,
         gap_width=0.05,
-        initial_speed=2,
+        initial_speed=0.01 ,
         framerate=60,
-        flap_strength=10,
+        flap_strength=0.01
     )
     game_loop(settings)
 
@@ -41,7 +41,7 @@ def game_loop(settings):
     """
     tick = 0
     ended = False
-    player = Player(settings, 100, 100, 50, 50)
+    player = Player(settings, 0.05, 0.5, 0.05, 0.05)
     state_reader = (
         None  # Something that combines the player and generator data into a state
     )

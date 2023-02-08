@@ -10,11 +10,11 @@ class Player:
     """
 
     settings: Settings
-    x: int
-    y: int
-    width: int
-    height: int
-    dy: int = 0
+    x: float
+    y: float
+    width: float
+    height: float
+    dy: float = 0
 
     def update(self):
         """Update the player according to the game physics and checks for collisions"""
@@ -27,11 +27,11 @@ class Player:
 
     def collision_check(self):
         """Checks for collisions between player and border of x-y space"""
-        return self.y + self.height > self.settings.max_y
+        return self.y + self.height > 1
 
     def flap(self):
         """Perform a flap action to go up"""
         self.dy = -self.settings.flap_strength
 
-    def get_visual(self):
-        return pg.rect.Rect(self.x, self.y, self.width, self.height)
+    def __str__(self):
+        return f'(Player x: {self.x} | y: {self.y})'

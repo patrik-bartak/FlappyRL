@@ -9,7 +9,7 @@ class Tube:
     the tube can be removed as it no longer plays any role in the game.
     """
 
-    def __init__(self, x, gap_height, width, speed, max_x, max_y):
+    def __init__(self, x, gap_height, width, speed):
         """
 
         :param x: The x coordinate
@@ -23,8 +23,6 @@ class Tube:
         self.gap_position = np.random.random() * gap_height
         self.width = width
         self.speed = speed
-        self.max_x = max_x
-        self.max_y = max_y
 
     def update(self, tick):
         """
@@ -37,17 +35,17 @@ class Tube:
         return True
 
     def get_x_coord(self):
-        return self.x, self.x + self.width * self.max_x
+        return self.x, self.x + self.width
 
     def collision(self, player):
         # Check if player is inside the tube
         if (player.x + player.width >= self.x > player.x) or \
-                (player.x + player.width >= self.x and player.x <= self.x + self.width * self.max_x) \
+                (player.x + player.width >= self.x and player.x <= self.x + self.width) \
                 or \
-                (player.x <= self.x + self.width * self.max_x < player.x + player.width):
+                (player.x <= self.x + self.width < player.x + player.width):
             # Return true if y position would be in a collision state, otherwise false
-            return player.y + player.height >= (self.gap_position + self.gap_height) * self.max_y \
-                   or player.y <= self.gap_position * self.max_y
+            return player.y + player.height >= self.gap_position + self.gap_height \
+                   or player.y <= self.gap_position
 
         return False
 
@@ -58,4 +56,4 @@ class Tube:
         return self.x
 
     def verify(self):
-        return self.x >= 0
+        return self.x + self.width >= 0

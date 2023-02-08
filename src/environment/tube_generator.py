@@ -16,8 +16,6 @@ class TubeGenerator:
         self.gap_height = settings.gap_height
         self.gap_width = settings.gap_width
         self.initial_speed = settings.initial_speed
-        self.max_x = settings.max_x
-        self.max_y = settings.max_y
         self.tubes = []
         # Number of passed tubes increases only when a tube is forgotten.
         self.passed = 0
@@ -63,9 +61,7 @@ class TubeGenerator:
                     self.start,
                     self.gap_height,
                     self.gap_width,
-                    self.initial_speed,
-                    self.max_x,
-                    self.max_y,
+                    self.initial_speed
                 )
             )
 

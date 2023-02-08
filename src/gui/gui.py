@@ -26,21 +26,22 @@ class Gui:
         # reset window fill
         self.window.fill((255, 255, 255))
         # draw player
-        pg.draw.rect(self.window, (0, 0, 255), self.player.get_visual())
+        pg.draw.rect(self.window, (0, 0, 255), pg.rect.Rect(self.player.x * self.max_x, self.player.y * self.max_y,
+                                                            self.player.width * self.max_x, self.player.height * self.max_y))
         # draw tubes
         for tube in self.tube_generator.tubes:
             pg.draw.rect(
                 self.window,
                 (0, 255, 0),
                 pg.rect.Rect(
-                    tube.x, 0, tube.width * self.max_x, tube.gap_position * self.max_y
+                    tube.x * self.max_x, 0, tube.width * self.max_x, tube.gap_position * self.max_y
                 ),
             )
             pg.draw.rect(
                 self.window,
                 (0, 255, 0),
                 pg.rect.Rect(
-                    tube.x,
+                    tube.x * self.max_x,
                     (tube.gap_position + tube.gap_height) * self.max_y,
                     tube.width * self.max_x,
                     (1 - tube.gap_position - tube.gap_height) * self.max_y,
