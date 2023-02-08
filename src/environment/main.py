@@ -58,7 +58,7 @@ def game_loop(settings):
         # Update all tubes
         ended = generator.update(tick)
         if ended:
-            print("COLLISION")   
+            print("COLLISION")
         action = settings.agent.act(state=None)
         if action == 1:
             player.dy = -10

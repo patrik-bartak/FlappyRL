@@ -26,12 +26,11 @@ class Gui:
         # draw tubes
         for tube in self.tube_generator.tubes:
             pg.draw.rect(self.window, (0, 255, 0), pg.rect.Rect(tube.x, 0, tube.width * self.max_x,
-                                                                tube.gap_position * self.max_y), 1)
+                                                                tube.gap_position * self.max_y))
             pg.draw.rect(self.window, (0, 255, 0), pg.rect.Rect(tube.x,
                                                                 (tube.gap_position + tube.gap_height) * self.max_y,
                                                                 tube.width * self.max_x,
-                                                                (1 - tube.gap_position - tube.gap_height) * self.max_y),
-                         1)
+                                                                (1 - tube.gap_position - tube.gap_height) * self.max_y))
         # draw frame counter
         self.draw_frame_counter()
         # update
