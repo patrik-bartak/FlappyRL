@@ -5,6 +5,8 @@ from gui.gui import Gui
 
 @dataclass
 class Settings:
+    """Configuration for the project"""
+
     agent: None
     reward_function: Callable
     gui_bool: bool

@@ -2,6 +2,8 @@ import pygame as pg
 
 
 class Gui:
+    """Displays the game graphically"""
+
     def __init__(self, settings, player, tube_generator) -> None:
         self.player = player
         self.tube_generator = tube_generator
@@ -17,6 +19,7 @@ class Gui:
         pass
 
     def draw(self):
+        """Update the GUI based on the game state"""
         self.clock.tick(self.framerate)
         self.frame_number += 1
         # reset window fill
@@ -49,6 +52,7 @@ class Gui:
         pass
 
     def draw_frame_counter(self):
+        """Draw the counter for the frame and framerate"""
         text = self.font.render(
             f"FPS: {self.clock.get_fps():.0f} | Frame: {self.frame_number}",
             True,
@@ -59,4 +63,5 @@ class Gui:
         self.window.blit(text, textRect)
 
     def quit(self):
+        """Quit the GUI"""
         pg.quit()
