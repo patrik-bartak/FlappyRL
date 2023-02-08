@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import numpy.random as rand
 import pygame as pg
 from enum import Enum
 
@@ -47,13 +48,26 @@ class HumanAgent(Agent):
 
 
 @dataclass
+class RandomAgent(Agent):
+    """
+    Agent that flaps randomly with 0.1 probability
+    """
+
+    def act(self, state):
+        return Action.FLAP if rand.binomial(1, 0.1) else Action.NO_FLAP
+
+    def record(self, state, action, reward):
+        pass
+
+
+@dataclass
 class DummyAgent(Agent):
     """
     Agent that always flaps
     """
 
     def act(self, state):
-        return 1
+        return Action.FLAP
 
     def record(self, state, action, reward):
         pass

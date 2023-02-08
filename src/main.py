@@ -2,7 +2,7 @@ from gui.gui import Gui
 from environment.tube_generator import TubeGenerator
 from environment.settings import Settings
 from environment.player import Player
-from agent.agents import HumanAgent, DummyAgent, Action
+from agent.agents import HumanAgent, DummyAgent, RandomAgent, Action
 
 
 def main():
@@ -13,7 +13,7 @@ def main():
     :return:
     """
     settings = Settings(
-        agent=HumanAgent(),
+        agent=RandomAgent(),
         reward_function=lambda x: 0,
         gui_bool=True,
         max_ticks=1000,
