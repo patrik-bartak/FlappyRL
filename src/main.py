@@ -2,7 +2,7 @@ from gui.gui import Gui
 from environment.tube_generator import TubeGenerator
 from environment.settings import Settings
 from environment.player import Player
-from environment.human_agent import HumanAgent
+from environment.agents import HumanAgent, DummyAgent
 
 
 def main():
@@ -25,6 +25,8 @@ def main():
         gap_height=0.5,
         gap_width=0.05,
         initial_speed=2,
+        framerate=60,
+        flap_strength=10,
     )
     game_loop(settings)
 
@@ -56,7 +58,7 @@ def game_loop(settings):
             print("COLLISION")
         action = settings.agent.act(state=None)
         if action == 1:
-            player.dy = -10
+            player.flap()
         # Record the state, action and reward to the agent
         # settings.agent.record(
         #     state=state_reader.get_state(),

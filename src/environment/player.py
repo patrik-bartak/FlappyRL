@@ -10,12 +10,10 @@ class Player:
     y: int
     width: int
     height: int
-    dx: int = 0
     dy: int = 0
 
     def update(self):
-        self.dy += 1 * self.settings.acceleration
-        self.x += self.dx
+        self.dy += self.settings.acceleration
         self.y += self.dy
         if self.y < 0:
             self.y = 0
@@ -23,6 +21,9 @@ class Player:
         if self.y + self.height > self.settings.max_y:
             return True
         return False
+
+    def flap(self):
+        self.dy = -self.settings.flap_strength
 
     def get_visual(self):
         return pg.rect.Rect(self.x, self.y, self.width, self.height)

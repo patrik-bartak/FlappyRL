@@ -17,3 +17,5 @@ class Settings:
     gap_height: float
     gap_width: float
     initial_speed: int
+    framerate: int
+    flap_strength: int

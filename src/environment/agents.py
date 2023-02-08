@@ -1,6 +1,15 @@
 from dataclasses import dataclass
-from environment.agent import Agent
 import pygame as pg
+
+
+@dataclass
+class Agent:
+    def act(self, state):
+        action = None
+        return action
+
+    def record(self, state, action, reward):
+        pass
 
 
 @dataclass
@@ -12,6 +21,17 @@ class HumanAgent(Agent):
             if e.type == pg.KEYDOWN and e.key == pg.K_SPACE:
                 return 1
         return 0
+
+    def record(self, state, action, reward):
+        pass
+
+
+@dataclass
+class DummyAgent(Agent):
+    pass
+
+    def act(self, state):
+        return 1
 
     def record(self, state, action, reward):
         pass
