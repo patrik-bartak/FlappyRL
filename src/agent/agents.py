@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from abc import ABC, abstractmethod
 import numpy.random as rand
 import pygame as pg
 from enum import Enum
@@ -14,15 +15,19 @@ class Action(Enum):
 
 
 @dataclass
-class Agent:
+class Agent(ABC):
     """
     Interface for all agents that interact with the game
     """
 
-    def act(self, state):
-        action = None
-        return action
+    @abstractmethod
+    def act(self, state) -> Action:
+        """
+        Mapping of states to actions that defines the policy of the agent
+        """
+        pass
 
+    @abstractmethod
     def record(self, state, action, reward):
         pass
 
@@ -33,7 +38,7 @@ class HumanAgent(Agent):
     Agent controlled by the player through the GUI and using the spacebar
     """
 
-    def act(self, state):
+    def act(self, state) -> Action:
         # Check for pygame initialization
         if not pg.get_init():
             raise Exception("Cannot use HumanAgent without GUI")
@@ -71,4 +76,3 @@ class DummyAgent(Agent):
 
     def record(self, state, action, reward):
         pass
-
