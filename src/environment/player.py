@@ -1,6 +1,4 @@
 from dataclasses import dataclass
-import pygame as pg
-from environment.settings import Settings
 
 
 @dataclass
@@ -9,16 +7,17 @@ class Player:
     Represents the player object in the game
     """
 
-    settings: Settings
     x: float
     y: float
     width: float
     height: float
+    acceleration: float
+    flap_strength: float
     dy: float = 0
 
     def update(self):
         """Update the player according to the game physics and checks for collisions"""
-        self.dy += self.settings.acceleration
+        self.dy += self.acceleration
         self.y += self.dy
         if self.y < 0:
             self.y = 0
@@ -31,7 +30,7 @@ class Player:
 
     def flap(self):
         """Perform a flap action to go up"""
-        self.dy = -self.settings.flap_strength
+        self.dy = -self.flap_strength
 
     def __str__(self):
-        return f'(Player x: {self.x} | y: {self.y})'
+        return f"(Player x: {self.x} | y: {self.y})"

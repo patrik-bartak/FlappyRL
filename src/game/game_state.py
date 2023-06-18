@@ -2,7 +2,6 @@ from enum import Enum
 from typing import Any
 from statemachine import StateMachine
 from statemachine.states import States
-
 from environment.player import Player
 from environment.tube_generator import TubeGenerator
 

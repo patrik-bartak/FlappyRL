@@ -10,5 +10,5 @@ class Reward(ABC):
 
 
 class TickReward(Reward):
-    def get_reward(self, state: GameStateMachine, action: Action):
+    def get_reward(self, state: GameStateMachine, action: Action) -> float:
         return state.tick

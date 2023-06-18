@@ -1,12 +1,12 @@
 import agent
 import sys
-from environment.reward import TickReward
-from game.game_state import GameStateMachine
-from gui.gui import GraphicalUserInterface, NoInterface
+import pygame as pg
 from environment.tube_generator import TubeGenerator
 from environment.settings import Settings
 from environment.player import Player
-import pygame as pg
+from environment.reward import TickReward
+from game.game_state import GameStateMachine
+from gui.gui import GraphicalUserInterface, NoInterface, TextInterface
 from agent.agents import HumanAgent, DummyAgent, RandomAgent, Action
 
 
@@ -23,7 +23,7 @@ def main():
         player_width=0.025,
         player_height=0.05,
         reward=TickReward(),
-        gui_bool=True,
+        ui="GraphicalUserInterface",
         max_ticks=1000,
         acceleration=0.001,
         # Convenient for it to be a power of 2
@@ -48,7 +48,14 @@ def game_loop(settings):
 
     :param settings: JSON representing the settings of the experiment.
     """
-    player = Player(settings, 0.05, 0.5, settings.player_width, settings.player_height)
+    player = Player(
+        0.05,
+        0.5,
+        settings.player_width,
+        settings.player_height,
+        settings.acceleration,
+        settings.flap_strength,
+    )
     generator = TubeGenerator(player=player, settings=settings)
     gs = GameStateMachine(player, generator)
     gs.tick = 0
@@ -61,8 +68,10 @@ def game_loop(settings):
     # Define reward function in the settings
     reward = settings.reward
     # Instantiate the GUI if required
-    if settings.gui_bool:
+    if settings.ui == "GraphicalUserInterface":
         ui = GraphicalUserInterface(settings, player, generator, gs)
+    elif settings.ui == "TextInterface":
+        ui = TextInterface(gs)
     else:
         ui = NoInterface()
     if not isinstance(settings.agent, HumanAgent):
@@ -109,7 +118,6 @@ def game_loop(settings):
             break
         # Display GUI if needed
         ui.draw()
-        print("Game State: ", gs.current_state.id, end="\r")
 
 
 if __name__ == "__main__":

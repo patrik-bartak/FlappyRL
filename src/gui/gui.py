@@ -13,6 +13,17 @@ class NoInterface(UserInterface):
         pass
 
 
+class TextInterface(UserInterface):
+    def __init__(self, game_state) -> None:
+        self.game_state = game_state
+
+    def draw(self):
+        print(
+            f"Game State: {self.game_state.current_state.id} | Game Tick: {self.game_state.tick:04d}",
+            end="\r",
+        )
+
+
 class GraphicalUserInterface(UserInterface):
     """Displays the game graphically"""
 

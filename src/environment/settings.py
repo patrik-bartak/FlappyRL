@@ -1,8 +1,8 @@
 from dataclasses import dataclass
-from typing import Callable
+from typing import Type
 from agent.agents import Agent
+from gui.gui import UserInterface
 from environment.reward import Reward
-from gui.gui import GraphicalUserInterface
 
 
 @dataclass
@@ -13,7 +13,7 @@ class Settings:
     player_width: float
     player_height: float
     reward: Reward
-    gui_bool: bool
+    ui: str
     max_ticks: int
     acceleration: float
     max_x: int

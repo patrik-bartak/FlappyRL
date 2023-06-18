@@ -1,8 +1,9 @@
-from dataclasses import dataclass
-from abc import ABC, abstractmethod
 import numpy.random as rand
 import pygame as pg
+from dataclasses import dataclass
+from abc import ABC, abstractmethod
 from enum import Enum
+from game.game_state import GameStateMachine
 
 
 class Action(Enum):
@@ -28,7 +29,13 @@ class Agent(ABC):
         pass
 
     @abstractmethod
-    def record(self, state, action, reward):
+    def record(self, state: GameStateMachine, action: Action, reward: float):
+        # import os
+
+        # log_dir = os.path.join(
+        #     os.path.normpath(os.getcwd() + os.sep + os.pardir), "logs"
+        # )
+        # log_fname = os.path.join(log_dir, "log_file_name.log")
         pass
 
 
@@ -48,7 +55,8 @@ class HumanAgent(Agent):
                 return Action.FLAP
         return Action.NO_FLAP
 
-    def record(self, state, action, reward):
+    def record(self, state: GameStateMachine, action: Action, reward: float):
+        super().record(state, action, reward)
         pass
 
 
@@ -62,6 +70,7 @@ class RandomAgent(Agent):
         return Action.FLAP if rand.binomial(1, 0.1) else Action.NO_FLAP
 
     def record(self, state, action, reward):
+        super().record(state, action, reward)
         pass
 
 
