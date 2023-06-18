@@ -1,12 +1,27 @@
+from abc import ABC, abstractmethod
 import pygame as pg
 
 
-class Gui:
+class UserInterface(ABC):
+    @abstractmethod
+    def draw(self):
+        pass
+
+
+class NoInterface(UserInterface):
+    def draw(self):
+        pass
+
+
+class GraphicalUserInterface(UserInterface):
     """Displays the game graphically"""
 
-    def __init__(self, settings, player, tube_generator) -> None:
+    font_path = "./fonts/monospace/MonospaceBold.ttf"
+
+    def __init__(self, settings, player, tube_generator, game_state) -> None:
         self.player = player
         self.tube_generator = tube_generator
+        self.game_state = game_state
         pg.init()
         self.settings = settings
         self.clock = pg.time.Clock()
@@ -16,7 +31,7 @@ class Gui:
         self.window.fill((255, 255, 255))
         self.framerate = settings.framerate
         self.frame_number = 0
-        self.font = pg.font.Font("freesansbold.ttf", 12)
+        self.font = pg.font.Font(self.font_path, 12)
         pass
 
     def draw(self):
@@ -26,15 +41,26 @@ class Gui:
         # reset window fill
         self.window.fill((255, 255, 255))
         # draw player
-        pg.draw.rect(self.window, (0, 0, 255), pg.rect.Rect(self.player.x * self.max_x, self.player.y * self.max_y,
-                                                            self.player.width * self.max_x, self.player.height * self.max_y))
+        pg.draw.rect(
+            self.window,
+            (0, 0, 255),
+            pg.rect.Rect(
+                self.player.x * self.max_x,
+                self.player.y * self.max_y,
+                self.player.width * self.max_x,
+                self.player.height * self.max_y,
+            ),
+        )
         # draw tubes
         for tube in self.tube_generator.tubes:
             pg.draw.rect(
                 self.window,
                 (0, 255, 0),
                 pg.rect.Rect(
-                    tube.x * self.max_x, 0, tube.width * self.max_x, tube.gap_position * self.max_y
+                    tube.x * self.max_x,
+                    0,
+                    tube.width * self.max_x,
+                    tube.gap_position * self.max_y,
                 ),
             )
             pg.draw.rect(
@@ -49,14 +75,38 @@ class Gui:
             )
         # draw frame counter
         self.draw_frame_counter()
+        # draw end screen
+        self.draw_end_screen()
         # update
         pg.display.flip()
         pass
 
+    def draw_end_screen(self):
+        if self.game_state.INITIAL.is_active:
+            fail_text = pg.font.Font(self.font_path, 50).render(
+                "PRESS SPACE TO START",
+                True,
+                (0, 0, 0),
+                (200, 200, 200),
+            )
+            textRect = fail_text.get_rect()
+            textRect.center = (self.max_x // 2, self.max_y // 2)
+            self.window.blit(fail_text, textRect)
+        if self.game_state.FAILURE.is_active:
+            fail_text = pg.font.Font(self.font_path, 50).render(
+                "GAME OVER",
+                True,
+                (0, 0, 0),
+                (200, 200, 200),
+            )
+            textRect = fail_text.get_rect()
+            textRect.center = (self.max_x // 2, self.max_y // 2)
+            self.window.blit(fail_text, textRect)
+
     def draw_frame_counter(self):
         """Draw the counter for the frame and framerate"""
         text = self.font.render(
-            f"FPS: {self.clock.get_fps():.0f} | Frame: {self.frame_number} | Agent: {self.settings.agent.__class__()}",
+            f"FPS: {self.clock.get_fps():.0f} | Frame: {self.frame_number:04d} | Game Tick: {self.game_state.tick:04d} | Game State: {self.game_state.current_state.id} | Agent: {self.settings.agent.__class__()}",
             True,
             (0, 0, 0),
         )

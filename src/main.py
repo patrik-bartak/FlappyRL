@@ -1,7 +1,12 @@
-from gui.gui import Gui
+import agent
+import sys
+from environment.reward import TickReward
+from game.game_state import GameStateMachine
+from gui.gui import GraphicalUserInterface, NoInterface
 from environment.tube_generator import TubeGenerator
 from environment.settings import Settings
 from environment.player import Player
+import pygame as pg
 from agent.agents import HumanAgent, DummyAgent, RandomAgent, Action
 
 
@@ -13,20 +18,24 @@ def main():
     :return:
     """
     settings = Settings(
-        agent=HumanAgent(),
-        reward_function=lambda x: 0,
+        # agent=HumanAgent(),
+        agent=RandomAgent(),
+        player_width=0.025,
+        player_height=0.05,
+        reward=TickReward(),
         gui_bool=True,
         max_ticks=1000,
         acceleration=0.001,
-        max_x=1000,
-        max_y=600,
+        # Convenient for it to be a power of 2
+        max_x=1024,
+        max_y=512,
         starting_x_coordinate=1,
         distance_between_tubes=0.2,
         gap_height=0.5,
         gap_width=0.05,
-        initial_speed=0.01 ,
+        initial_speed=0.005,
         framerate=60,
-        flap_strength=0.01
+        flap_strength=0.01,
     )
     game_loop(settings)
 
@@ -39,38 +48,71 @@ def game_loop(settings):
 
     :param settings: JSON representing the settings of the experiment.
     """
-    tick = 0
+    player = Player(settings, 0.05, 0.5, settings.player_width, settings.player_height)
+    generator = TubeGenerator(player=player, settings=settings)
+    gs = GameStateMachine(player, generator)
+    gs.tick = 0
+    # Tick for keeping the end screen up for human players
+    terminal_tick = 0
     ended = False
-    player = Player(settings, 0.05, 0.5, 0.05, 0.05)
     state_reader = (
         None  # Something that combines the player and generator data into a state
     )
     # Define reward function in the settings
-    reward_function = settings.reward_function
-    generator = TubeGenerator(player=player, settings=settings)
+    reward = settings.reward
     # Instantiate the GUI if required
     if settings.gui_bool:
-        gui = Gui(settings, player, generator)
-    while tick < settings.max_ticks and not ended:
-        # Update player and tubes and check for collisions
-        ended = player.update() or generator.update(tick)
-        if ended:
-            print("COLLISION")
-        action = settings.agent.act(state=None)
-        if action == Action.FLAP:
-            player.flap()
-        # Record the state, action and reward to the agent
-        # settings.agent.record(
-        #     state=state_reader.get_state(),
-        #     action=None,
-        #     reward=reward_function(state_reader, generator),
-        # )
-        tick += 1
+        ui = GraphicalUserInterface(settings, player, generator, gs)
+    else:
+        ui = NoInterface()
+    if not isinstance(settings.agent, HumanAgent):
+        # If not human, skip initial screen
+        gs.start_game()
+    # while tick < settings.max_ticks and not ended:
+    while True:
+        if gs.INITIAL.is_active:
+            # This means a human is playing
+            # Check for pygame initialization
+            if not pg.get_init():
+                raise Exception("Cannot use HumanAgent without GUI")
+            # Check for spacebar keypress
+            for event in pg.event.get():
+                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                    gs.start_game()
+        elif gs.PLAYING.is_active:
+            # Update player and tubes and check for collisions
+            ended = player.update() or generator.update(gs.tick)
+            if ended:
+                gs.lose_game()
+
+            action = settings.agent.act(state=gs)
+            if action == Action.FLAP:
+                player.flap()
+
+            # Record the state, action and reward to the agent
+            settings.agent.record(
+                state=gs,
+                action=action,
+                reward=reward.get_reward(gs, action),
+            )
+
+            gs.increment_tick()
+        elif gs.FAILURE.is_active or gs.SUCCESS.is_active:
+            if not isinstance(settings.agent, HumanAgent):
+                gs.end_game()
+                continue
+            terminal_tick += 1
+            # Wait for 2 seconds (120 frames)
+            if terminal_tick > 120:
+                gs.end_game()
+        elif gs.TERMINAL.is_active:
+            break
         # Display GUI if needed
-        if settings.gui_bool:
-            gui.draw()
-    print("GAME OVER. ")
+        ui.draw()
+        print("Game State: ", gs.current_state.id, end="\r")
 
 
 if __name__ == "__main__":
     main()
+    pg.quit()
+    sys.exit(0)
